@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados - Clasificador de Arquitectura</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .title {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .file-info {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .model-info {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .file-name {
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .results-title {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 300;
+        }
+        
+        .predictions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .prediction {
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .prediction:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .prediction.rank-1 {
+            border-left-color: #4CAF50;
+            background: linear-gradient(135deg, #f8fff8 0%, #f0f8f0 100%);
+        }
+        
+        .prediction.rank-2 {
+            border-left-color: #2196F3;
+            background: linear-gradient(135deg, #f8fbff 0%, #f0f6ff 100%);
+        }
+        
+        .prediction.rank-3 {
+            border-left-color: #FF9800;
+            background: linear-gradient(135deg, #fff8f0 0%, #fff4e6 100%);
+        }
+        
+        .prediction.rank-4 {
+            border-left-color: #9C27B0;
+            background: linear-gradient(135deg, #fdf8ff 0%, #f8f0ff 100%);
+        }
+        
+        .prediction.rank-5 {
+            border-left-color: #607D8B;
+            background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
+        }
+        
+        .prediction-content {
+            flex-grow: 1;
+        }
+        
+        .rank {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .rank.rank-1 { background: #4CAF50; }
+        .rank.rank-2 { background: #2196F3; }
+        .rank.rank-3 { background: #FF9800; }
+        .rank.rank-4 { background: #9C27B0; }
+        .rank.rank-5 { background: #607D8B; }
+        
+        .class-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .confidence {
+            font-size: 1.1em;
+            color: #666;
+        }
+        
+        .confidence-bar {
+            width: 100px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-left: 20px;
+        }
+        
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+        
+        .confidence-text {
+            margin-left: 10px;
+            font-weight: 600;
+            color: #333;
+            min-width: 50px;
+        }
+        
+        .actions {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .winner {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .winner-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .winner-text {
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .winner-building {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .prediction {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .confidence-bar {
+                margin: 10px auto 0;
+            }
+            
+            .confidence-text {
+                margin: 5px 0 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🏛️ Resultados del Análisis</h1>
+            <p class="subtitle">Predicciones para tu imagen</p>
+        </div>
+        
+        <div class="content">
+            <div class="file-info">
+                <div class="model-info">Modelo utilizado: {{ model_name or 'No especificado' }}</div>
+                <div class="file-name">Archivo: {{ filename }}</div>
+            </div>
+            
+            {% if predictions and predictions|length > 0 %}
+                <div class="winner">
+                    <div class="winner-icon">🏆</div>
+                    <div class="winner-text">Resultado más probable:</div>
+                    <div class="winner-building">{{ predictions[0].class }}</div>
+                    <div>Confianza: {{ "%.1f"|format(predictions[0].confidence) }}%</div>
+                </div>
+                
+                <h2 class="results-title">Top 5 Predicciones</h2>
+                
+                <div class="predictions">
+                    {% for pred in predictions %}
+                        <div class="prediction rank-{{ pred.rank }}">
+                            <div class="rank rank-{{ pred.rank }}">{{ pred.rank }}</div>
+                            <div class="prediction-content">
+                                <div class="class-name">{{ pred.class }}</div>
+                                <div class="confidence">Confianza del modelo</div>
+                            </div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: {{ pred.confidence }}%;"></div>
+                            </div>
+                            <div class="confidence-text">{{ "%.1f"|format(pred.confidence) }}%</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="error">
+                    No se pudieron obtener predicciones para esta imagen.
+                </div>
+            {% endif %}
+            
+            <div class="actions">
+                <a href="/" class="btn">🔄 Analizar otra imagen</a>
+                <button onclick="window.history.back()" class="btn btn-secondary">⬅️ Volver</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animación de barras de confianza
+        window.addEventListener('load', () => {
+            const bars = document.querySelectorAll('.confidence-fill');
+            bars.forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.style.opacity = '1';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificador de Arquitectura - La Plata</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 700px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .model-selector {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .model-selector h3 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .model-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .model-option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .model-option.active {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+        
+        .model-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .model-info {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-loaded {
+            background: #4caf50;
+        }
+        
+        .status-available {
+            background: #ff9800;
+        }
+        
+        .title {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .model-status {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+            font-size: 0.9em;
+        }
+        
+        .model-status.error {
+            background: #ffebee;
+            color: #c62828;
+            border-left-color: #f44336;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px 20px;
+            margin: 30px 0;
+            background: #f8f9ff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+        
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8ebff;
+            transform: scale(1.02);
+        }
+        
+        .upload-area.disabled {
+            border-color: #ccc;
+            background: #f5f5f5;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .upload-area.disabled:hover {
+            border-color: #ccc;
+            background: #f5f5f5;
+            transform: none;
+        }
+        
+        .upload-icon {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            color: #555;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .classes-info {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .classes-title {
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .classes-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .class-item {
+            background: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            color: #555;
+            border-left: 4px solid #667eea;
+        }
+        
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #c62828;
+        }
+        
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #2e7d32;
+        }
+        
+        .file-name {
+            color: #667eea;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🏛️ Clasificador de Arquitectura</h1>
+        <p class="subtitle">Identifica edificios emblemáticos de La Plata</p>
+        
+        <!-- Estado del Modelo -->
+        {% if current_model %}
+            <div class="model-status">
+                ✅ Modelo activo: {{ current_model }}
+            </div>
+        {% else %}
+            <div class="model-status error">
+                ⚠️ No hay modelo cargado. Selecciona un modelo abajo.
+            </div>
+        {% endif %}
+        
+        <!-- Selector de Modelos -->
+        <div class="model-selector">
+            <h3>🤖 Seleccionar Modelo</h3>
+            {% if models %}
+                <form method="POST" action="/load_model">
+                    {% for model in models %}
+                        <div class="model-option {% if current_model and model.name in current_model %}active{% endif %}" 
+                             onclick="selectModel('{{ model.path }}', this)">
+                            <div class="model-name">
+                                <span class="status-indicator {% if current_model and model.name in current_model %}status-loaded{% else %}status-available{% endif %}"></span>
+                                {{ model.name }}
+                            </div>
+                            <div class="model-info">
+                                {% if model.metadata.get('accuracy') %}
+                                    Precisión: {{ "%.2f"|format(model.metadata.accuracy * 100) }}%
+                                {% endif %}
+                                {% if model.metadata.get('model_type') %}
+                                    | Tipo: {{ model.metadata.model_type }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <input type="hidden" name="model_path" id="selectedModel">
+                    <button type="submit" class="btn" id="loadModelBtn" style="display: none;">
+                        Cargar Modelo
+                    </button>
+                </form>
+            {% else %}
+                <div class="error">
+                    No se encontraron modelos entrenados. 
+                    <br>Ejecuta primero el script de entrenamiento.
+                </div>
+            {% endif %}
+        </div>
+        
+        <form id="uploadForm" method="POST" action="/upload" enctype="multipart/form-data">
+            <div class="upload-area {% if not current_model %}disabled{% endif %}" id="uploadArea">
+                <div class="upload-icon">📸</div>
+                <div class="upload-text">
+                    {% if current_model %}
+                        <strong>Arrastra una imagen aquí</strong><br>
+                        o haz clic para seleccionar un archivo
+                    {% else %}
+                        <strong>Carga un modelo primero</strong><br>
+                        para poder analizar imágenes
+                    {% endif %}
+                </div>
+                <input type="file" name="file" id="fileInput" class="file-input" accept="image/*" required {% if not current_model %}disabled{% endif %}>
+                <button type="button" class="btn" onclick="document.getElementById('fileInput').click()" {% if not current_model %}disabled{% endif %}>
+                    Seleccionar Imagen
+                </button>
+            </div>
+            
+            <div class="file-name" id="fileName" style="display: none;"></div>
+            
+            <button type="submit" class="btn" id="submitBtn" disabled>
+                🔍 Analizar Imagen
+            </button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analizando imagen...</p>
+        </div>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="{% if category == 'success' %}success{% else %}error{% endif %}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="classes-info">
+            <h3 class="classes-title">Edificios que puede identificar:</h3>
+            <div class="classes-list">
+                {% for id, name in class_names.items() %}
+                    <div class="class-item">{{ name }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        const submitBtn = document.getElementById('submitBtn');
+        const uploadForm = document.getElementById('uploadForm');
+        const loading = document.getElementById('loading');
+
+        // Model selection functionality
+        function selectModel(modelPath, element) {
+            // Remove active class from all options
+            document.querySelectorAll('.model-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            
+            // Add active class to selected option
+            element.classList.add('active');
+            
+            // Set the selected model path
+            document.getElementById('selectedModel').value = modelPath;
+            document.getElementById('loadModelBtn').style.display = 'inline-block';
+        }
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('click', () => {
+            if (!uploadArea.classList.contains('disabled')) {
+                fileInput.click();
+            }
+        });
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            if (!uploadArea.classList.contains('disabled')) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            }
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            if (!uploadArea.classList.contains('disabled')) {
+                uploadArea.classList.remove('dragover');
+            }
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            if (!uploadArea.classList.contains('disabled')) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    handleFileSelect();
+                }
+            }
+        });
+        
+        fileInput.addEventListener('change', handleFileSelect);
+        
+        function handleFileSelect() {
+            const file = fileInput.files[0];
+            if (file) {
+                fileName.textContent = `Archivo seleccionado: ${file.name}`;
+                fileName.style.display = 'block';
+                submitBtn.disabled = false;
+            } else {
+                fileName.style.display = 'none';
+                submitBtn.disabled = true;
+            }
+        }
+        
+        uploadForm.addEventListener('submit', () => {
+            loading.style.display = 'block';
+            submitBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>

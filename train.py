@@ -32,7 +32,8 @@ from utils import (
     save_classification_report,
     cleanup_temp_directory,
     create_model_directory,
-    analyze_prediction_confidence
+    analyze_prediction_confidence,
+    make_model_graph
 )
 from models import get_available_models, get_model_config
 
@@ -162,7 +163,7 @@ def train_model(model_name, custom_epochs=None):
         console.log("[green]✅ Entrenamiento completado.[/green]")
         
         # Guardar modelo
-        model.save(model_dir)
+        model.save(model_out)
         console.log(f"[bold green]✅ Modelo guardado en {model_dir}[/bold green]")
                 
         # Generar visualizaciones
@@ -195,15 +196,8 @@ def train_model(model_name, custom_epochs=None):
         console.print(f"  • Gráficas guardadas en: plots/{timestamp}")
 
         analyze_prediction_confidence(model, val_ds, class_names, model_dir)
-        
-        model.summary()
 
-        tf.keras.utils.plot_model(
-            model, 
-            to_file=os.path.join(model_dir, "model_architecture.png"),
-            show_shapes=True,
-            show_layer_names=True
-        )
+        make_model_graph(model, model_dir)
 
         return True
         

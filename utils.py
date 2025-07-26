@@ -246,8 +246,8 @@ def analyze_prediction_confidence(model, test_dataset, class_names, model_dir):
                 
             all_predictions.append({
                 'class': class_names[predicted_class],
-                'confidence': max_confidence,
-                'probabilities': pred
+                'confidence': float(max_confidence),
+                'probabilities': pred.tolist()
             })
     
     total = sum(confidences.values())
@@ -263,3 +263,20 @@ def analyze_prediction_confidence(model, test_dataset, class_names, model_dir):
     
 
     return all_predictions
+
+def make_model_graph(model, model_dir):
+    """Genera y guarda el gráfico del modelo."""
+    model.summary()
+
+    try:
+        tf.keras.utils.plot_model(
+            model, 
+            to_file=os.path.join(model_dir, "model_architecture.png"),
+            show_shapes=True,
+            show_layer_names=True
+        )
+        console.log("[cyan]✔ Gráfico del modelo guardado.[/cyan]")
+    except Exception as e:
+        console.log(f"[yellow]⚠ No se pudo generar el gráfico del modelo: {str(e)}[/yellow]")
+        console.log("[yellow]  Para habilitar esta función, instala: pip install pydot[/yellow]")
+        console.log("[yellow]  Y graphviz desde: https://graphviz.gitlab.io/download/[/yellow]")
