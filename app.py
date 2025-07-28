@@ -106,7 +106,7 @@ def get_available_models():
                         pass
                 
                 available_models.append({
-                    'path': str(model_file),
+                    'path': str(model_file.resolve()),
                     'name': model_dir.name,
                     'metadata': metadata,
                     'created': model_file.stat().st_ctime
@@ -150,8 +150,11 @@ def load_trained_model(model_path=None):
             'LayerScale': LayerScale
         }
         
+        # Normalizar la ruta del modelo
+        model_path_normalized = str(Path(model_path).resolve())
+        
         with custom_object_scope(custom_objects):
-            model = load_model(model_path)
+            model = load_model(model_path_normalized)
         
         return True, f"Modelo cargado: {Path(model_path).parent.name}"
         
