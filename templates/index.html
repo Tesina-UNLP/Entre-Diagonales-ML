@@ -5,265 +5,352 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clasificador de Arquitectura - La Plata</title>
     <style>
+        :root {
+            /* Paleta principal (verde) */
+            --bg1: #0E534E; /* verde principal */
+            --bg2: #044A47; /* verde profundo */
+            --bg3: #0f1020;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(255, 255, 255, 0.5);
+            --text-1: #0f2a28;
+            --text-2: #44605d;
+            --ok: #0E534E;
+            --warn: #ff9800;
+            --error: #e53935;
+            --success-bg: #e6f4f2; /* tono verdoso claro */
+            --error-bg: #ffebee;
+            --chip-bg: #ffffff;
+            --chip-border: #d9eee9; /* borde mint */
+            --shadow-1: 0 10px 30px rgba(0,0,0,0.08);
+            --shadow-2: 0 20px 50px rgba(0,0,0,0.14);
+            --radius-xl: 22px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --grad: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        html, body {
+            height: 100%;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            background:
+                radial-gradient(1200px 600px at 10% 10%, rgba(255,255,255,0.08), transparent 40%),
+                radial-gradient(900px 500px at 90% 20%, rgba(255,255,255,0.06), transparent 40%),
+                radial-gradient(1000px 700px at 50% 100%, rgba(255,255,255,0.05), transparent 40%),
+                var(--grad);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 32px 20px;
+            color: var(--text-1);
         }
-        
+
         .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 40px;
-            max-width: 700px;
-            width: 90%;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px) saturate(120%);
+            -webkit-backdrop-filter: blur(12px) saturate(120%);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-2);
+            padding: 36px;
+            max-width: 920px;
+            width: 100%;
             text-align: center;
+            animation: rise 500ms ease-out both;
         }
-        
+
+        @keyframes rise {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .title {
+            color: var(--text-1);
+            margin-bottom: 8px;
+            font-size: clamp(2.0rem, 3vw, 2.6rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-2);
+            margin-bottom: 28px;
+            font-size: 1.05rem;
+        }
+
+        .model-status {
+            background: linear-gradient(0deg, #eefaf0, #eefaf0);
+            color: #1b5e20;
+            padding: 12px 14px;
+            border-radius: var(--radius-md);
+            margin: 12px 0 20px;
+            border: 1px solid #cce9d1;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .model-status.error {
+            background: linear-gradient(0deg, #fff3f4, #fff3f4);
+            color: #8b1b1b;
+            border-color: #ffd2d6;
+        }
+
         .model-selector {
-            background: #f8f9ff;
-            border-radius: 15px;
+            background: rgba(240, 253, 250, 0.7);
+            border-radius: var(--radius-lg);
             padding: 20px;
-            margin: 20px 0;
+            margin: 18px 0 24px;
             text-align: left;
+            border: 1px solid #d9eee9;
         }
-        
+
         .model-selector h3 {
-            color: #333;
-            margin-bottom: 15px;
+            color: var(--text-1);
+            margin-bottom: 16px;
             text-align: center;
+            font-weight: 700;
+            letter-spacing: -0.01em;
         }
-        
+
+        /* Grid para opciones de modelos */
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+        }
+
         .model-option {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 10px 0;
+            background: #ffffff;
+            border: 1.5px solid #dfeeea;
+            border-radius: var(--radius-md);
+            padding: 14px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+            box-shadow: var(--shadow-1);
         }
-        
+
         .model-option:hover {
-            border-color: #667eea;
+            border-color: var(--bg1);
             transform: translateY(-2px);
+            box-shadow: 0 14px 24px rgba(4, 74, 71, 0.18);
         }
-        
+
         .model-option.active {
-            border-color: #667eea;
-            background: #f0f2ff;
+            border-color: var(--bg1);
+            background: linear-gradient(0deg, #eefaf7, #ffffff);
+            box-shadow: 0 16px 28px rgba(4, 74, 71, 0.22);
         }
-        
+
         .model-name {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
+            font-weight: 700;
+            color: var(--text-1);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        
+
         .model-info {
             font-size: 0.9em;
-            color: #666;
+            color: var(--text-2);
         }
-        
+
         .status-indicator {
             display: inline-block;
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            margin-right: 8px;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.12);
         }
-        
-        .status-loaded {
-            background: #4caf50;
-        }
-        
-        .status-available {
-            background: #ff9800;
-        }
-        
-        .title {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            font-weight: 300;
-        }
-        
-        .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-        }
-        
-        .model-status {
-            background: #e8f5e8;
-            color: #2e7d32;
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin: 10px 0;
-            border-left: 4px solid #4caf50;
-            font-size: 0.9em;
-        }
-        
-        .model-status.error {
-            background: #ffebee;
-            color: #c62828;
-            border-left-color: #f44336;
-        }
-        
+        .status-loaded { background: var(--ok); }
+        .status-available { background: var(--warn); }
+
         .upload-area {
-            border: 3px dashed #667eea;
-            border-radius: 15px;
-            padding: 40px 20px;
-            margin: 30px 0;
-            background: #f8f9ff;
-            transition: all 0.3s ease;
+            border: 2.5px dashed rgba(14, 83, 78, 0.65);
+            border-radius: var(--radius-lg);
+            padding: 36px 20px;
+            margin: 26px 0 16px;
+            background: linear-gradient(180deg, rgba(241,252,249,0.8), rgba(236,250,247,0.8));
+            transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
             cursor: pointer;
+            position: relative;
         }
-        
+
         .upload-area:hover {
-            border-color: #764ba2;
-            background: #f0f2ff;
+            border-color: rgba(4, 74, 71, 0.9);
+            background: linear-gradient(180deg, rgba(231,248,244,0.9), rgba(225,246,241,0.9));
+            box-shadow: 0 14px 30px rgba(4, 74, 71, 0.15);
+            transform: translateY(-2px);
         }
-        
+
         .upload-area.dragover {
-            border-color: #764ba2;
-            background: #e8ebff;
-            transform: scale(1.02);
+            border-color: #0E534E;
+            background: linear-gradient(180deg, #e5f7f3, #def3ef);
+            transform: scale(1.01);
         }
-        
+
         .upload-area.disabled {
-            border-color: #ccc;
-            background: #f5f5f5;
+            border-color: #d9d9e6;
+            background: #f5f6fb;
             cursor: not-allowed;
             opacity: 0.6;
-        }
-        
-        .upload-area.disabled:hover {
-            border-color: #ccc;
-            background: #f5f5f5;
+            box-shadow: none;
             transform: none;
         }
-        
+        .upload-area.disabled:hover {
+            border-color: #d9d9e6;
+            background: #f5f6fb;
+            transform: none;
+        }
+
         .upload-icon {
-            font-size: 3em;
-            color: #667eea;
-            margin-bottom: 15px;
+            font-size: 2.6em;
+            color: transparent;
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 6px 14px rgba(4,74,71,0.12));
         }
-        
+
         .upload-text {
-            color: #555;
-            font-size: 1.1em;
-            margin-bottom: 15px;
+            color: var(--text-2);
+            font-size: 1.05em;
+            margin-bottom: 12px;
         }
-        
-        .file-input {
-            display: none;
-        }
-        
+
+        .file-input { display: none; }
+
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--grad);
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 1em;
+            padding: 12px 22px;
+            border-radius: 999px;
+            font-size: 0.98em;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+            margin: 8px;
+            box-shadow: 0 8px 18px rgba(4,74,71,0.35);
+            position: relative;
+            isolation: isolate;
         }
-        
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 14px 26px rgba(4,74,71,0.45);
         }
-        
+        .btn:focus-visible {
+            outline: 3px solid rgba(102,126,234,0.45);
+            outline-offset: 3px;
+        }
         .btn:disabled {
-            background: #ccc;
+            background: #cfd2e6;
+            box-shadow: none;
             cursor: not-allowed;
             transform: none;
         }
-        
+
         .classes-info {
-            background: #f8f9ff;
-            border-radius: 15px;
+            background: rgba(241, 252, 249, 0.85);
+            border-radius: var(--radius-lg);
             padding: 20px;
-            margin: 30px 0;
+            margin: 26px 0 4px;
             text-align: left;
+            border: 1px solid #d9eee9;
         }
-        
+
         .classes-title {
-            color: #333;
-            margin-bottom: 15px;
-            font-weight: 600;
+            color: var(--text-1);
+            margin-bottom: 14px;
+            font-weight: 800;
             text-align: center;
         }
-        
+
         .classes-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
+            justify-content: center;
         }
-        
+
         .class-item {
-            background: white;
-            padding: 10px 15px;
-            border-radius: 10px;
-            color: #555;
-            border-left: 4px solid #667eea;
+            background: var(--chip-bg);
+            padding: 10px 14px;
+            border-radius: 999px;
+            color: var(--text-2);
+            border: 1px solid var(--chip-border);
+            box-shadow: 0 6px 14px rgba(4,74,71,0.08);
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+            font-weight: 600;
+            font-size: 0.95em;
         }
-        
+        .class-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.12);
+        }
+
         .loading {
             display: none;
-            margin: 20px 0;
+            margin: 16px 0 6px;
         }
-        
+
         .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            width: 46px;
+            height: 46px;
+            margin: 0 auto 8px;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            background:
+                radial-gradient(farthest-side, #fff 94%, #0000) top/8px 8px no-repeat,
+                conic-gradient(from 0deg, var(--bg1) 10%, var(--bg2) 60%, #cfeeea 100%);
+            -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+            mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
             animation: spin 1s linear infinite;
-            margin: 0 auto;
         }
-        
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(1turn); }
         }
-        
+
+        .error, .success {
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            margin: 16px 0;
+            border-left: 4px solid;
+            box-shadow: var(--shadow-1);
+        }
         .error {
-            background: #ffebee;
-            color: #c62828;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #c62828;
+            background: var(--error-bg);
+            color: #8b1b1b;
+            border-left-color: var(--error);
         }
-        
         .success {
-            background: #e8f5e8;
-            color: #2e7d32;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #2e7d32;
+            background: var(--success-bg);
+            color: #0b3d3a;
+            border-left-color: var(--ok);
         }
-        
+
         .file-name {
-            color: #667eea;
-            font-weight: 600;
-            margin: 10px 0;
+            color: var(--bg1);
+            font-weight: 800;
+            margin: 8px 0 2px;
+        }
+
+        /* Accesibilidad: foco visible en opciones */
+        .model-option:focus-visible,
+        .upload-area:focus-visible {
+            outline: 3px solid rgba(14, 83, 78, 0.35);
+            outline-offset: 3px;
         }
     </style>
 </head>
@@ -271,7 +358,7 @@
     <div class="container">
         <h1 class="title">🏛️ Clasificador de Arquitectura</h1>
         <p class="subtitle">Identifica edificios emblemáticos de La Plata</p>
-        
+
         <!-- Estado del Modelo -->
         {% if current_model %}
             <div class="model-status">
@@ -282,29 +369,31 @@
                 ⚠️ No hay modelo cargado. Selecciona un modelo abajo.
             </div>
         {% endif %}
-        
+
         <!-- Selector de Modelos -->
         <div class="model-selector">
             <h3>🤖 Seleccionar Modelo</h3>
             {% if models %}
                 <form method="POST" action="/load_model">
-                    {% for model in models %}
-                        <div class="model-option {% if current_model and model.name in current_model %}active{% endif %}" 
-                             onclick="selectModel('{{ model.path }}', this)">
-                            <div class="model-name">
-                                <span class="status-indicator {% if current_model and model.name in current_model %}status-loaded{% else %}status-available{% endif %}"></span>
-                                {{ model.name }}
+                    <div class="model-grid">
+                        {% for model in models %}
+                            <div class="model-option {% if current_model and model.name in current_model %}active{% endif %}" 
+                                 onclick="selectModel('{{ model.path }}', this)" tabindex="0" role="button" aria-label="Seleccionar {{ model.name }}">
+                                <div class="model-name">
+                                    <span class="status-indicator {% if current_model and model.name in current_model %}status-loaded{% else %}status-available{% endif %}"></span>
+                                    {{ model.name }}
+                                </div>
+                                <div class="model-info">
+                                    {% if model.metadata.get('accuracy') %}
+                                        Precisión: {{ "%.2f"|format(model.metadata.accuracy * 100) }}%
+                                    {% endif %}
+                                    {% if model.metadata.get('model_type') %}
+                                        | Tipo: {{ model.metadata.model_type }}
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div class="model-info">
-                                {% if model.metadata.get('accuracy') %}
-                                    Precisión: {{ "%.2f"|format(model.metadata.accuracy * 100) }}%
-                                {% endif %}
-                                {% if model.metadata.get('model_type') %}
-                                    | Tipo: {{ model.metadata.model_type }}
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                     <input type="hidden" name="model_path" id="selectedModel">
                     <button type="submit" class="btn" id="loadModelBtn" style="display: none;">
                         Cargar Modelo
@@ -317,7 +406,7 @@
                 </div>
             {% endif %}
         </div>
-        
+
         <form id="uploadForm" method="POST" action="/upload" enctype="multipart/form-data">
             <div class="upload-area {% if not current_model %}disabled{% endif %}" id="uploadArea">
                 <div class="upload-icon">📸</div>
@@ -335,19 +424,19 @@
                     Seleccionar Imagen
                 </button>
             </div>
-            
+
             <div class="file-name" id="fileName" style="display: none;"></div>
-            
+
             <button type="submit" class="btn" id="submitBtn" disabled>
                 🔍 Analizar Imagen
             </button>
         </form>
-        
+
         <div class="loading" id="loading">
             <div class="spinner"></div>
             <p>Analizando imagen...</p>
         </div>
-        
+
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -355,7 +444,7 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        
+
         <div class="classes-info">
             <h3 class="classes-title">Edificios que puede identificar:</h3>
             <div class="classes-list">
@@ -380,10 +469,10 @@
             document.querySelectorAll('.model-option').forEach(opt => {
                 opt.classList.remove('active');
             });
-            
+
             // Add active class to selected option
             element.classList.add('active');
-            
+
             // Set the selected model path
             document.getElementById('selectedModel').value = modelPath;
             document.getElementById('loadModelBtn').style.display = 'inline-block';
@@ -395,35 +484,38 @@
                 fileInput.click();
             }
         });
-        
+
         uploadArea.addEventListener('dragover', (e) => {
             if (!uploadArea.classList.contains('disabled')) {
                 e.preventDefault();
                 uploadArea.classList.add('dragover');
             }
         });
-        
+
         uploadArea.addEventListener('dragleave', () => {
             if (!uploadArea.classList.contains('disabled')) {
                 uploadArea.classList.remove('dragover');
             }
         });
-        
+
         uploadArea.addEventListener('drop', (e) => {
             if (!uploadArea.classList.contains('disabled')) {
                 e.preventDefault();
                 uploadArea.classList.remove('dragover');
-                
+
                 const files = e.dataTransfer.files;
                 if (files.length > 0) {
-                    fileInput.files = files;
+                    // Asegura la asignación usando DataTransfer para mayor compatibilidad
+                    const dt = new DataTransfer();
+                    for (const f of files) dt.items.add(f);
+                    fileInput.files = dt.files;
                     handleFileSelect();
                 }
             }
         });
-        
+
         fileInput.addEventListener('change', handleFileSelect);
-        
+
         function handleFileSelect() {
             const file = fileInput.files[0];
             if (file) {
@@ -435,7 +527,7 @@
                 submitBtn.disabled = true;
             }
         }
-        
+
         uploadForm.addEventListener('submit', () => {
             loading.style.display = 'block';
             submitBtn.disabled = true;

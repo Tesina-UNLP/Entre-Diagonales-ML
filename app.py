@@ -276,6 +276,23 @@ def upload_file():
     flash('Tipo de archivo no permitido')
     return redirect(url_for('index'))
 
+@app.route('/upload', methods=['GET'])
+def upload_get():
+    """Redirige a la página principal si se accede por GET a /upload."""
+    flash('Usa el formulario de la página inicial para subir una imagen.', 'error')
+    return redirect(url_for('index'))
+
+@app.errorhandler(413)
+def too_large(e):
+    """Manejo de archivos demasiado grandes."""
+    flash('La imagen supera el tamaño máximo permitido (16MB).', 'error')
+    return redirect(url_for('index'))
+
+@app.errorhandler(405)
+def method_not_allowed(e):
+    """Manejo de métodos no permitidos, redirigiendo al inicio."""
+    return redirect(url_for('index'))
+
 @app.route('/api/predict', methods=['POST'])
 def api_predict():
     """API endpoint para predicción."""

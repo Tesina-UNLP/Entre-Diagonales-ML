@@ -5,252 +5,300 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados - Clasificador de Arquitectura</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg1: #0E534E; /* verde principal */
+            --bg2: #044A47; /* verde profundo */
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(255, 255, 255, 0.5);
+            --text-1: #0f2a28;
+            --text-2: #44605d;
+            --ok: #0E534E;
+            --rank2: #2a8f8a;
+            --rank3: #ff9800;
+            --rank4: #2d6a4f;
+            --rank5: #5a6d6a;
+            --shadow-1: 0 10px 30px rgba(0,0,0,0.08);
+            --shadow-2: 0 20px 50px rgba(0,0,0,0.14);
+            --radius-xl: 22px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --grad: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
         }
-        
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            background:
+                radial-gradient(1200px 600px at 10% 10%, rgba(255,255,255,0.08), transparent 40%),
+                radial-gradient(900px 500px at 90% 20%, rgba(255,255,255,0.06), transparent 40%),
+                radial-gradient(1000px 700px at 50% 100%, rgba(255,255,255,0.05), transparent 40%),
+                var(--grad);
             min-height: 100vh;
-            padding: 20px;
+            padding: 28px 18px;
+            color: var(--text-1);
         }
-        
+
         .container {
-            max-width: 800px;
+            max-width: 980px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-2);
             overflow: hidden;
+            backdrop-filter: blur(12px) saturate(120%);
+            -webkit-backdrop-filter: blur(12px) saturate(120%);
+            animation: fadeIn 480ms ease-out both;
         }
-        
+
+        @keyframes fadeIn {
+            from { transform: translateY(8px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--grad);
             color: white;
-            padding: 30px;
+            padding: 32px;
             text-align: center;
         }
-        
+
         .title {
-            font-size: 2.5em;
-            font-weight: 300;
-            margin-bottom: 10px;
+            font-size: clamp(2rem, 3vw, 2.6rem);
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
         }
-        
+
         .subtitle {
-            font-size: 1.1em;
+            font-size: 1.05em;
+            opacity: 0.95;
+        }
+
+        .content { padding: 34px; }
+
+        .file-info {
+            background: rgba(241, 252, 249, 0.9);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            margin-bottom: 26px;
+            text-align: center;
+            border: 1px solid #d9eee9;
+            box-shadow: var(--shadow-1);
+        }
+
+        .model-info {
+            color: var(--text-2);
+            font-size: 0.96em;
+            margin-bottom: 6px;
+        }
+
+        .file-name {
+            color: var(--text-1);
+            font-weight: 800;
+            font-size: 1.05em;
+        }
+
+        .winner {
+            background: linear-gradient(135deg, rgba(14, 83, 78, 0.12), rgba(14, 83, 78, 0.06));
+            color: #0b3d3a;
+            text-align: center;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 28px;
+            border: 1px solid rgba(14,83,78,0.25);
+            box-shadow: 0 10px 24px rgba(14,83,78,0.18);
+        }
+
+        .winner-icon {
+            font-size: 2rem;
+            margin-bottom: 6px;
+        }
+
+        .winner-text {
+            font-size: 1.05em;
+            font-weight: 700;
             opacity: 0.9;
         }
-        
-        .content {
-            padding: 40px;
+
+        .winner-building {
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            font-weight: 900;
+            margin: 10px 0 4px;
+            letter-spacing: -0.01em;
         }
-        
-        .file-info {
-            background: #f8f9ff;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .model-info {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-        }
-        
-        .file-name {
-            color: #333;
-            font-weight: 600;
-            font-size: 1.1em;
-        }
-        
+
         .results-title {
-            color: #333;
-            font-size: 1.8em;
-            margin-bottom: 25px;
+            color: var(--text-1);
+            font-size: 1.6em;
+            margin-bottom: 18px;
             text-align: center;
-            font-weight: 300;
+            font-weight: 800;
+            letter-spacing: -0.01em;
         }
-        
+
         .predictions {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
         }
-        
+
         .prediction {
             background: #fff;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            border-left: 5px solid;
-            transition: all 0.3s ease;
+            border-radius: var(--radius-lg);
+            padding: 16px 18px;
+            box-shadow: var(--shadow-1);
+            border: 1px solid #d9eee9;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            will-change: transform;
         }
-        
+
         .prediction:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            box-shadow: 0 16px 30px rgba(4,74,71,0.15);
+            border-color: rgba(14,83,78,0.45);
         }
-        
+
         .prediction.rank-1 {
-            border-left-color: #4CAF50;
-            background: linear-gradient(135deg, #f8fff8 0%, #f0f8f0 100%);
+            border-left: 6px solid var(--ok);
+            background: linear-gradient(135deg, #f3fbf9 0%, #eefaf7 100%);
         }
-        
         .prediction.rank-2 {
-            border-left-color: #2196F3;
-            background: linear-gradient(135deg, #f8fbff 0%, #f0f6ff 100%);
+            border-left: 6px solid var(--rank2);
+            background: linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%);
         }
-        
         .prediction.rank-3 {
-            border-left-color: #FF9800;
-            background: linear-gradient(135deg, #fff8f0 0%, #fff4e6 100%);
+            border-left: 6px solid var(--rank3);
+            background: linear-gradient(135deg, #fff8f0 0%, #fff3e6 100%);
         }
-        
         .prediction.rank-4 {
-            border-left-color: #9C27B0;
+            border-left: 6px solid var(--rank4);
             background: linear-gradient(135deg, #fdf8ff 0%, #f8f0ff 100%);
         }
-        
         .prediction.rank-5 {
-            border-left-color: #607D8B;
+            border-left: 6px solid var(--rank5);
             background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
         }
-        
-        .prediction-content {
-            flex-grow: 1;
-        }
-        
+
+        .prediction-content { flex-grow: 1; padding: 0 12px; }
+
         .rank {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-right: 15px;
-            min-width: 40px;
-            height: 40px;
+            font-size: 1.05em;
+            font-weight: 900;
+            margin-right: 10px;
+            min-width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
         }
-        
-        .rank.rank-1 { background: #4CAF50; }
-        .rank.rank-2 { background: #2196F3; }
-        .rank.rank-3 { background: #FF9800; }
-        .rank.rank-4 { background: #9C27B0; }
-        .rank.rank-5 { background: #607D8B; }
-        
+        .rank.rank-1 { background: var(--ok); }
+        .rank.rank-2 { background: var(--rank2); }
+        .rank.rank-3 { background: var(--rank3); }
+        .rank.rank-4 { background: var(--rank4); }
+        .rank.rank-5 { background: var(--rank5); }
+
         .class-name {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
+            font-size: 1.18em;
+            font-weight: 800;
+            color: var(--text-1);
+            margin-bottom: 2px;
+            letter-spacing: -0.01em;
         }
-        
+
         .confidence {
-            font-size: 1.1em;
-            color: #666;
+            font-size: 0.96em;
+            color: var(--text-2);
         }
-        
+
+        .confidence-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 170px;
+            justify-content: flex-end;
+        }
+
         .confidence-bar {
-            width: 100px;
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 4px;
+            width: 120px;
+            height: 10px;
+            background: #e3f2ef;
+            border-radius: 999px;
             overflow: hidden;
-            margin-left: 20px;
+            position: relative;
+            border: 1px solid #d4ebe7;
         }
-        
+
         .confidence-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            border-radius: 4px;
-            transition: width 0.8s ease;
+            background: linear-gradient(90deg, var(--bg1) 0%, var(--bg2) 100%);
+            border-radius: 999px;
+            box-shadow: inset 0 0 6px rgba(4,74,71,0.25);
+            transition: width 900ms ease, opacity 600ms ease;
+            opacity: 0.95;
+            width: 0; /* empieza en 0 para permitir la animación hacia el valor objetivo */
         }
-        
+
         .confidence-text {
-            margin-left: 10px;
-            font-weight: 600;
-            color: #333;
-            min-width: 50px;
+            font-weight: 800;
+            color: var(--text-1);
+            min-width: 54px;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
         }
-        
+
         .actions {
             text-align: center;
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid #eee;
+            margin-top: 34px;
+            padding-top: 24px;
+            border-top: 1px solid #eef0ff;
         }
-        
+
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--grad);
             color: white;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 1em;
+            padding: 12px 24px;
+            border-radius: 999px;
+            font-size: 0.98em;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px;
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+            margin: 8px;
             text-decoration: none;
             display: inline-block;
+            box-shadow: 0 8px 18px rgba(4,74,71,0.35);
         }
-        
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 14px 26px rgba(4,74,71,0.45);
         }
-        
-        .btn-secondary {
+
+        .btn.btn-secondary {
             background: #6c757d;
+            box-shadow: 0 8px 18px rgba(108,117,125,0.35);
         }
-        
-        .winner {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
-            text-align: center;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        .btn.btn-secondary:hover {
+            box-shadow: 0 14px 26px rgba(108,117,125,0.45);
         }
-        
-        .winner-icon {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-        
-        .winner-text {
-            font-size: 1.2em;
-            font-weight: 600;
-        }
-        
-        .winner-building {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        
+
         @media (max-width: 768px) {
+            .content { padding: 22px; }
             .prediction {
                 flex-direction: column;
                 text-align: center;
+                gap: 10px;
             }
-            
-            .confidence-bar {
-                margin: 10px auto 0;
-            }
-            
-            .confidence-text {
-                margin: 5px 0 0 0;
+            .prediction-content { padding: 6px 0; }
+            .confidence-wrap {
+                justify-content: center;
+                width: 100%;
             }
         }
     </style>
@@ -261,13 +309,13 @@
             <h1 class="title">🏛️ Resultados del Análisis</h1>
             <p class="subtitle">Predicciones para tu imagen</p>
         </div>
-        
+
         <div class="content">
             <div class="file-info">
                 <div class="model-info">Modelo utilizado: {{ model_name or 'No especificado' }}</div>
                 <div class="file-name">Archivo: {{ filename }}</div>
             </div>
-            
+
             {% if predictions and predictions|length > 0 %}
                 <div class="winner">
                     <div class="winner-icon">🏆</div>
@@ -275,9 +323,9 @@
                     <div class="winner-building">{{ predictions[0].class }}</div>
                     <div>Confianza: {{ "%.1f"|format(predictions[0].confidence) }}%</div>
                 </div>
-                
+
                 <h2 class="results-title">Top 5 Predicciones</h2>
-                
+
                 <div class="predictions">
                     {% for pred in predictions %}
                         <div class="prediction rank-{{ pred.rank }}">
@@ -286,19 +334,21 @@
                                 <div class="class-name">{{ pred.class }}</div>
                                 <div class="confidence">Confianza del modelo</div>
                             </div>
-                            <div class="confidence-bar">
-                                <div class="confidence-fill" style="width: {{ pred.confidence }}%;"></div>
+                            <div class="confidence-wrap">
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" data-target="{{ pred.confidence }}" style="width: 0;"></div>
+                                </div>
+                                <div class="confidence-text">{{ "%.1f"|format(pred.confidence) }}%</div>
                             </div>
-                            <div class="confidence-text">{{ "%.1f"|format(pred.confidence) }}%</div>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="error">
+                <div class="file-info" style="border-left: 4px solid #e53935; color: #7a1a1a;">
                     No se pudieron obtener predicciones para esta imagen.
                 </div>
             {% endif %}
-            
+
             <div class="actions">
                 <a href="/" class="btn">🔄 Analizar otra imagen</a>
                 <button onclick="window.history.back()" class="btn btn-secondary">⬅️ Volver</button>
@@ -310,10 +360,24 @@
         // Animación de barras de confianza
         window.addEventListener('load', () => {
             const bars = document.querySelectorAll('.confidence-fill');
+            const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
             bars.forEach((bar, index) => {
+                const target = parseFloat(bar.getAttribute('data-target') || '0');
+                if (Number.isNaN(target)) return;
+
+                if (prefersReduced) {
+                    // Sin animación para usuarios que prefieren reducir movimiento
+                    bar.style.transition = 'none';
+                    bar.style.width = `${target}%`;
+                    return;
+                }
+
+                // Pequeño desfase para un efecto de cascada
                 setTimeout(() => {
+                    bar.style.width = `${target}%`;
                     bar.style.opacity = '1';
-                }, index * 200);
+                }, index * 180);
             });
         });
     </script>
