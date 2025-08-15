@@ -6,23 +6,35 @@
     <title>Resultados - Clasificador de Arquitectura</title>
     <style>
         :root {
-            --bg1: #0E534E; /* verde principal */
-            --bg2: #044A47; /* verde profundo */
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --card-border: rgba(255, 255, 255, 0.5);
-            --text-1: #0f2a28;
-            --text-2: #44605d;
-            --ok: #0E534E;
+            /* Tema personalizado */
+            --bg-1: #0a2f2d;         /* fondo base */
+            --bg-2: #062423;         /* fondo profundo */
+            --card: #0f3a37;         /* tarjeta */
+            --ring: #2c5a56;         /* bordes */
+            --text: #e6f3f2;         /* texto principal */
+            --muted: #b9c9c8;        /* texto secundario */
+            --accent: #d7efe9;       /* acento suave */
+            --primary: #2d6a64;      /* botón */
+            --primary-hover: #2a5e59;
+            --error: #e24d4d;        /* estados */
+            --success: #28a745;
+            
+            /* Variables de compatibilidad */
+            --card-bg: var(--card);
+            --card-border: var(--ring);
+            --text-1: var(--text);
+            --text-2: var(--muted);
+            --ok: var(--primary);
             --rank2: #2a8f8a;
             --rank3: #ff9800;
             --rank4: #2d6a4f;
             --rank5: #5a6d6a;
-            --shadow-1: 0 10px 30px rgba(0,0,0,0.08);
-            --shadow-2: 0 20px 50px rgba(0,0,0,0.14);
+            --shadow-1: 0 10px 30px rgba(0,0,0,0.15);
+            --shadow-2: 0 20px 50px rgba(0,0,0,0.25);
             --radius-xl: 22px;
             --radius-lg: 16px;
             --radius-md: 12px;
-            --grad: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
+            --grad: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,21 +42,20 @@
         body {
             font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
             background:
-                radial-gradient(1200px 600px at 10% 10%, rgba(255,255,255,0.08), transparent 40%),
-                radial-gradient(900px 500px at 90% 20%, rgba(255,255,255,0.06), transparent 40%),
-                radial-gradient(1000px 700px at 50% 100%, rgba(255,255,255,0.05), transparent 40%),
-                var(--grad);
+                radial-gradient(70% 90% at 0% 0%, #0f4b46 0%, transparent 60%),
+                radial-gradient(60% 80% at 100% 100%, #093230 0%, transparent 55%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2));
             min-height: 100vh;
             padding: 28px 18px;
-            color: var(--text-1);
+            color: var(--text);
         }
 
         .container {
             max-width: 980px;
             margin: 0 auto;
-            background: var(--card-bg);
+            background: var(--card);
             border-radius: var(--radius-xl);
-            border: 1px solid var(--card-border);
+            border: 1px solid var(--ring);
             box-shadow: var(--shadow-2);
             overflow: hidden;
             backdrop-filter: blur(12px) saturate(120%);
@@ -79,36 +90,36 @@
         .content { padding: 34px; }
 
         .file-info {
-            background: rgba(241, 252, 249, 0.9);
+            background: rgba(15, 58, 55, 0.6);
             border-radius: var(--radius-lg);
             padding: 18px;
             margin-bottom: 26px;
             text-align: center;
-            border: 1px solid #d9eee9;
+            border: 1px solid var(--ring);
             box-shadow: var(--shadow-1);
         }
 
         .model-info {
-            color: var(--text-2);
+            color: var(--muted);
             font-size: 0.96em;
             margin-bottom: 6px;
         }
 
         .file-name {
-            color: var(--text-1);
+            color: var(--text);
             font-weight: 800;
             font-size: 1.05em;
         }
 
         .winner {
-            background: linear-gradient(135deg, rgba(14, 83, 78, 0.12), rgba(14, 83, 78, 0.06));
-            color: #0b3d3a;
+            background: linear-gradient(135deg, rgba(45, 106, 100, 0.2), rgba(45, 106, 100, 0.1));
+            color: var(--text);
             text-align: center;
             padding: 24px;
             border-radius: var(--radius-lg);
             margin-bottom: 28px;
-            border: 1px solid rgba(14,83,78,0.25);
-            box-shadow: 0 10px 24px rgba(14,83,78,0.18);
+            border: 1px solid var(--primary);
+            box-shadow: 0 10px 24px rgba(45, 106, 100, 0.25);
         }
 
         .winner-icon {
@@ -130,7 +141,7 @@
         }
 
         .results-title {
-            color: var(--text-1);
+            color: var(--text);
             font-size: 1.6em;
             margin-bottom: 18px;
             text-align: center;
@@ -145,11 +156,11 @@
         }
 
         .prediction {
-            background: #fff;
+            background: var(--card);
             border-radius: var(--radius-lg);
             padding: 16px 18px;
             box-shadow: var(--shadow-1);
-            border: 1px solid #d9eee9;
+            border: 1px solid var(--ring);
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             display: flex;
             align-items: center;
@@ -159,29 +170,29 @@
 
         .prediction:hover {
             transform: translateY(-2px);
-            box-shadow: 0 16px 30px rgba(4,74,71,0.15);
-            border-color: rgba(14,83,78,0.45);
+            box-shadow: 0 16px 30px rgba(45, 106, 100, 0.25);
+            border-color: var(--primary);
         }
 
         .prediction.rank-1 {
             border-left: 6px solid var(--ok);
-            background: linear-gradient(135deg, #f3fbf9 0%, #eefaf7 100%);
+            background: linear-gradient(135deg, rgba(45, 106, 100, 0.15) 0%, rgba(45, 106, 100, 0.08) 100%);
         }
         .prediction.rank-2 {
             border-left: 6px solid var(--rank2);
-            background: linear-gradient(135deg, #f8fbff 0%, #eef6ff 100%);
+            background: linear-gradient(135deg, rgba(42, 143, 138, 0.12) 0%, rgba(42, 143, 138, 0.06) 100%);
         }
         .prediction.rank-3 {
             border-left: 6px solid var(--rank3);
-            background: linear-gradient(135deg, #fff8f0 0%, #fff3e6 100%);
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.12) 0%, rgba(255, 152, 0, 0.06) 100%);
         }
         .prediction.rank-4 {
             border-left: 6px solid var(--rank4);
-            background: linear-gradient(135deg, #fdf8ff 0%, #f8f0ff 100%);
+            background: linear-gradient(135deg, rgba(45, 106, 79, 0.12) 0%, rgba(45, 106, 79, 0.06) 100%);
         }
         .prediction.rank-5 {
             border-left: 6px solid var(--rank5);
-            background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
+            background: linear-gradient(135deg, rgba(90, 109, 106, 0.12) 0%, rgba(90, 109, 106, 0.06) 100%);
         }
 
         .prediction-content { flex-grow: 1; padding: 0 12px; }
@@ -208,14 +219,14 @@
         .class-name {
             font-size: 1.18em;
             font-weight: 800;
-            color: var(--text-1);
+            color: var(--text);
             margin-bottom: 2px;
             letter-spacing: -0.01em;
         }
 
         .confidence {
             font-size: 0.96em;
-            color: var(--text-2);
+            color: var(--muted);
         }
 
         .confidence-wrap {
@@ -229,18 +240,18 @@
         .confidence-bar {
             width: 120px;
             height: 10px;
-            background: #e3f2ef;
+            background: rgba(44, 90, 86, 0.3);
             border-radius: 999px;
             overflow: hidden;
             position: relative;
-            border: 1px solid #d4ebe7;
+            border: 1px solid var(--ring);
         }
 
         .confidence-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--bg1) 0%, var(--bg2) 100%);
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-hover) 100%);
             border-radius: 999px;
-            box-shadow: inset 0 0 6px rgba(4,74,71,0.25);
+            box-shadow: inset 0 0 6px rgba(45, 106, 100, 0.35);
             transition: width 900ms ease, opacity 600ms ease;
             opacity: 0.95;
             width: 0; /* empieza en 0 para permitir la animación hacia el valor objetivo */
@@ -248,7 +259,7 @@
 
         .confidence-text {
             font-weight: 800;
-            color: var(--text-1);
+            color: var(--text);
             min-width: 54px;
             text-align: right;
             font-variant-numeric: tabular-nums;
@@ -258,34 +269,36 @@
             text-align: center;
             margin-top: 34px;
             padding-top: 24px;
-            border-top: 1px solid #eef0ff;
+            border-top: 1px solid var(--ring);
         }
 
         .btn {
-            background: var(--grad);
-            color: white;
-            border: none;
+            background: var(--primary);
+            color: var(--text);
+            border: 1px solid var(--ring);
             padding: 12px 24px;
             border-radius: 999px;
             font-size: 0.98em;
             cursor: pointer;
-            transition: transform 0.15s ease, box-shadow 0.2s ease;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
             margin: 8px;
             text-decoration: none;
             display: inline-block;
-            box-shadow: 0 8px 18px rgba(4,74,71,0.35);
+            box-shadow: 0 8px 18px rgba(45, 106, 100, 0.35);
         }
         .btn:hover {
+            background: var(--primary-hover);
             transform: translateY(-2px);
-            box-shadow: 0 14px 26px rgba(4,74,71,0.45);
+            box-shadow: 0 14px 26px rgba(45, 106, 100, 0.45);
         }
 
         .btn.btn-secondary {
-            background: #6c757d;
-            box-shadow: 0 8px 18px rgba(108,117,125,0.35);
+            background: var(--ring);
+            box-shadow: 0 8px 18px rgba(44, 90, 86, 0.35);
         }
         .btn.btn-secondary:hover {
-            box-shadow: 0 14px 26px rgba(108,117,125,0.45);
+            background: #3a6a65;
+            box-shadow: 0 14px 26px rgba(44, 90, 86, 0.45);
         }
 
         @media (max-width: 768px) {
@@ -344,7 +357,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="file-info" style="border-left: 4px solid #e53935; color: #7a1a1a;">
+                <div class="file-info" style="border-left: 4px solid var(--error); color: var(--error); background: rgba(226, 77, 77, 0.12);">
                     No se pudieron obtener predicciones para esta imagen.
                 </div>
             {% endif %}
